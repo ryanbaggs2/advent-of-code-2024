@@ -9,6 +9,7 @@ pub(crate) fn day1() {
     part_two(left_list, right_list);
 }
 
+// Total time complexity is O(n* log(k)) due to sorting requirement.
 fn part_one() {
     let (mut left_list, mut right_list) = build_lists();
 
@@ -18,6 +19,7 @@ fn part_one() {
     print_distance(left_list, right_list);
 }
 
+// O(n) time complexity
 fn part_two(left_list: Vec<u32>, right_list: Vec<u32>) {
     let mut counts = HashMap::new();
 
@@ -45,6 +47,7 @@ fn part_two(left_list: Vec<u32>, right_list: Vec<u32>) {
     println!("Similarity score of the lists is: {}", sum);
 }
 
+// Time complexity O(n)
 fn build_lists() -> (Vec<u32>, Vec<u32>){
     let mut left_list = Vec::new();
     let mut right_list = Vec::new();
@@ -66,6 +69,7 @@ fn build_lists() -> (Vec<u32>, Vec<u32>){
     (left_list, right_list)
 }
 
+// Time complexity O(n)
 fn print_distance(left_list: Vec<u32>, right_list: Vec<u32>) {
     let mut iter = right_list.iter();
     let mut total_distance = 0;
