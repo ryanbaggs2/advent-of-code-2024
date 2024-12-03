@@ -19,15 +19,15 @@ fn part_one() {
 }
 
 fn part_two(left_list: Vec<u32>, right_list: Vec<u32>) {
-    let mut counters = HashMap::new();
+    let mut counts = HashMap::new();
 
     // Count the number of times ID number shows in the right list
     // O(n) time complexity
     for id_num in right_list {
-        if let Some(counter) = counters.get_mut(&id_num) {
-            *counter += 1;
+        if let Some(count) = counts.get_mut(&id_num) {
+            *count += 1;
         } else {
-            counters.insert(id_num, 1);
+            counts.insert(id_num, 1);
         }
     }
 
@@ -35,9 +35,8 @@ fn part_two(left_list: Vec<u32>, right_list: Vec<u32>) {
     // O(n) time complexity
     let mut similarity_scores = Vec::new();
     for id_num in left_list {
-        if counters.contains_key(&id_num) {
-            let similarity_score = id_num * counters.get(&id_num)
-                .expect("Verified it exists");
+        if let Some(count) = counts.get(&id_num) {
+            let similarity_score = id_num * count;
             similarity_scores.push(similarity_score);
         }
     }
