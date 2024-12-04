@@ -1,0 +1,14 @@
+Day 1:
+
+Distance between Location IDs.
+
+Building the arrays O(logn):
+read the text file into a buffer
+read line
+parse line into left and right array
+
+Calculate distance O(n):
+sort array
+distance between smallest for both, then second smallest for both, and so on (absolute value)
+get the total distance between the two lists
+print the answer
