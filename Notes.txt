@@ -1,5 +1,6 @@
 Day 1:
 
+Part 1:
 Distance between Location IDs.
 
 Building the arrays O(logn):
@@ -12,3 +13,44 @@ sort array
 distance between smallest for both, then second smallest for both, and so on (absolute value)
 get the total distance between the two lists
 print the answer
+
+Part 2:
+How often does each number from the left list appear in the right list?
+
+don't need to sort.
+
+create new hash set
+if key in set increment its counter
+else add key to set, set its counter to one
+
+create score list
+for each item in left list
+if item is in hash set, multiply by counter, add to score list
+no else case, we just skip
+
+Day 2:
+
+Part 1:
+One report per line, a single number is a level, separated by spaces
+all decreasing or all increasing are safe
+differ by at least 1, and at most (==) 3
+
+loop for each line (report)
+parse data into vec of numbers
+if left == right report is unsafe
+if difference > 3 return unsafe
+
+if left > right decreasing_check
+if left < right increasing_check
+
+check:
+loop through whole vec
+if left <= || => right return unsafe
+if difference > 3 return unsafe
+
+Part 2:
+our solution is recursive
+add a bad level counter initialized at 0
+add bad level counter to safe_recursive signature
+change early false returns to a bad level counter increment, and recursive call
+at end of recursive function, if bad level counter > 1 return false
