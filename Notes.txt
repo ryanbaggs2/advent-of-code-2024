@@ -49,8 +49,18 @@ if left <= || => right return unsafe
 if difference > 3 return unsafe
 
 Part 2:
-our solution is recursive
-add a bad level counter initialized at 0
-add bad level counter to safe_recursive signature
-change early false returns to a bad level counter increment, and recursive call
-at end of recursive function, if bad level counter > 1 return false
+This time I'm thinking we use a for loop and get the differences between 
+each of the values.
+put differences between values into vec
+initialize positive_quantity and negative_quantity
+initialize bad_levels
+
+loop over differences
+if pos increment pos
+if neg increment neg
+if 0 increment bad_levels
+if > 3 increment bad_levels
+
+
+
+add smaller quantity and bad_levels
