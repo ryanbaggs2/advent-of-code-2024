@@ -50,6 +50,21 @@ if difference > 3 return unsafe
 
 Part 2:
 
+CS Jackie's solution on YouTube ended up being the solution I used,
+What I learned is that I need to not be afraid of coming up with an
+O(n^2) solution, it's always better to have a solution than not. Also,
+I need to consider if the data gets modified along the way, for example
+the report was set to mutable when performing the safe_better function, so
+I should have expected the values to be mutated and made a copy of the
+original report.
+
+Performing chain operations is a great way to create clean solutions if
+you need to iterate over values. the iter().all() function is a great way to
+check if some predicate is true across all values in a collection.
+
+Here's the link to her YouTube video solution:
+https://www.youtube.com/watch?v=sghAbg0WKt8
+
 Here's the problem, it's with absolute value of 3.
 9 7 6 2 1
 if we remove 6 or any of those we still have an unsafe report
