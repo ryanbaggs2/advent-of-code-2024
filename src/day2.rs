@@ -1,7 +1,6 @@
 use std::collections::VecDeque;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::cmp;
 
 pub fn day2() {
     part_one();
@@ -14,11 +13,10 @@ fn part_one() {
     let reports = parse_reports();
     
     for mut report in reports {
-        if safe(&mut report) {
+        if safe_better(&mut report) {
             safe_reports_count += 1;
         }
     }
-    
     println!("Number of safe reports: {}", safe_reports_count);
 }
 
@@ -27,7 +25,7 @@ fn part_two() {
     let reports = parse_reports();
 
     for mut report in reports {
-        if safe_p2(&mut report) {
+        if safe_dampened(&mut report) {
             safe_reports_count += 1;
         }
     }
@@ -60,6 +58,7 @@ fn parse_reports() -> Vec<VecDeque<i8>> {
 }
 
 // O(n) time complexity
+#[allow(dead_code)]
 fn safe(report: &mut VecDeque<i8>) -> bool {
     let first_level = report[0];
     let second_level = report[1];
@@ -107,46 +106,53 @@ fn safe_recursive(report: &mut VecDeque<i8>, increasing: bool) -> bool {
     safe_recursive(report, increasing)
 }
 
-// TODO: Make recursive, report and bad_levels will need to be passed to track
-// O(n) time complexity
-fn safe_p2(report: &mut VecDeque<i8>) -> bool {
-    let mut previous_level = report.pop_front().expect("Should be a value");
+// Thank you so much to CS Jackie on YT for this solution:
+// https://www.youtube.com/watch?v=sghAbg0WKt8
+fn safe_better(report: &mut VecDeque<i8>) -> bool {
+    if report.len() <= 1 {
+        return true
+    }
+
+    // Get the differences
+    let mut diffs = Vec::new();
+    let mut previous = report.pop_front().expect("Should be a value");
     
-    let mut differences: Vec<i8> = Vec::new();
-    let mut positive_quantity = 0;
-    let mut negative_quantity = 0;
-    let mut bad_levels = 0;
-    
-    // TODO: In recursive fn, check number of bad levels here, if == 2 return false
-    
-    for current_level in report {
-        differences.push(previous_level - *current_level);
-        previous_level = *current_level;
+    for current in report {
+        diffs.push(previous - *current);
+        previous = *current;
     }
     
-    for diff in differences {
+    let ascending = diffs.iter().all(
+        |level| *level >= 1 && *level <= 3
+    );
+    let descending = diffs.iter().all(
+        |level| *level <=-1 && *level >= -3
+    );
+    
+    ascending || descending
+}
+
+// Thank you so much to CS Jackie on YouTube for this solution:
+// https://www.youtube.com/watch?v=sghAbg0WKt8
+// This solution has an O(n^2) worst case time complexity.
+fn safe_dampened(report: &mut VecDeque<i8>) -> bool {
+    // Need to make a deep copy, as safe_better pops one of the values from 
+    // the report.
+    let mut report_copy = report.clone();
+    let safe = safe_better(&mut report_copy);
+    
+    if !safe {
+        for (index, _level) in report.iter().enumerate() {
+            let mut dampened_report = report.clone();
+            dampened_report.remove(index);
+            
+            if safe_better(&mut dampened_report) {
+                return true
+            }
+        }
         
-        if diff == 0 || diff.abs() > 3 {
-            bad_levels += 1;
-            // TODO: Remove bad_level from report
-            // It's already a bad level, we don't need to include it in the increasing or
-            // decreasing checks
-            continue;
-        }
-        if diff > 0 {
-            positive_quantity += 1;
-        }
-        if diff < 0 {
-            negative_quantity += 1;
-        }
-    }
-    
-    // Include the bad levels caught for increasing/decreasing
-    bad_levels = bad_levels + cmp::min(positive_quantity, negative_quantity);
-    
-    if bad_levels > 1 {
         return false
     }
     
-    true
+    safe
 }
