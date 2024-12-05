@@ -107,15 +107,17 @@ fn safe_recursive(report: &mut VecDeque<i8>, increasing: bool) -> bool {
     safe_recursive(report, increasing)
 }
 
+// TODO: Make recursive, report and bad_levels will need to be passed to track
 // O(n) time complexity
 fn safe_p2(report: &mut VecDeque<i8>) -> bool {
-    let mut previous_level = report[0];
-    report.pop_front();
+    let mut previous_level = report.pop_front().expect("Should be a value");
     
     let mut differences: Vec<i8> = Vec::new();
     let mut positive_quantity = 0;
     let mut negative_quantity = 0;
     let mut bad_levels = 0;
+    
+    // TODO: In recursive fn, check number of bad levels here, if == 2 return false
     
     for current_level in report {
         differences.push(previous_level - *current_level);
@@ -123,8 +125,10 @@ fn safe_p2(report: &mut VecDeque<i8>) -> bool {
     }
     
     for diff in differences {
+        
         if diff == 0 || diff.abs() > 3 {
             bad_levels += 1;
+            // TODO: Remove bad_level from report
             // It's already a bad level, we don't need to include it in the increasing or
             // decreasing checks
             continue;

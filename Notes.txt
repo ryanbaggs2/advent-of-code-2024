@@ -49,6 +49,12 @@ if left <= || => right return unsafe
 if difference > 3 return unsafe
 
 Part 2:
+
+Here's the problem, it's with absolute value of 3.
+9 7 6 2 1
+if we remove 6 or any of those we still have an unsafe report
+we would have to remove the bad_level and differences would have to be redone if we did it this way
+
 This time I'm thinking we use a for loop and get the differences between 
 each of the values.
 put differences between values into vec
@@ -60,7 +66,5 @@ if pos increment pos
 if neg increment neg
 if 0 increment bad_levels
 if > 3 increment bad_levels
-
-
 
 add smaller quantity and bad_levels
