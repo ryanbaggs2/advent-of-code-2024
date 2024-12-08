@@ -83,3 +83,19 @@ if 0 increment bad_levels
 if > 3 increment bad_levels
 
 add smaller quantity and bad_levels
+
+Day 3
+
+This looks like it can be solved with regular expressions.
+I'm going to use the regex crate to assist with this
+I'm also going to start this off with a test string that should match successfully
+
+read input
+make a new regex pattern r"mul\(([0-9]{1,3})\,([0-9]{1,3})\)" // greedy
+
+for string in input
+iterate over captures assigning to Vec of the values as &str
+for pair of values multiply
+add result to total
+
+print result.
