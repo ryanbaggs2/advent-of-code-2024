@@ -133,3 +133,7 @@ if flag perform multiplication, add to result
 // End loop
 
 print result
+
+Ended up using a slightly different solution, but this works even if it's not super elegant.
+The reason I couldn't use above was that I couldn't get the values from the instruction 
+while also getting the index of where it was.
