@@ -137,3 +137,31 @@ print result
 Ended up using a slightly different solution, but this works even if it's not super elegant.
 The reason I couldn't use above was that I couldn't get the values from the instruction 
 while also getting the index of where it was.
+
+Day 4:
+
+Part 1:
+horizontal forward/backwards
+diagonals forward and backwards
+
+This will be an O(n) solution
+To handle the upside down diagonals, we can reverse the whole word_search
+
+for each line in word_search
+
+check if end of line is less than 4 characters away, if it is, next line.
+
+horizontal:
+take string slice of 4 characters, see if they match XMAS or SAMX
+if match, increment counter
+
+diagonal:
+get slice of string 4 times for top left to bottom right characters, see if they match XMAS or SAMX
+if match, increment counter
+
+reverse whole word_search, may need to recombine it and see if it
+run diagonal again.
+
+print the count
+
+140 * 140 input.
