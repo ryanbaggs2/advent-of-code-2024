@@ -1,83 +1,71 @@
-use std::collections::HashMap;
-use std::fs::File;
-use std::io::BufReader;
+use std::fs;
 use std::io::prelude::*;
 
 pub(crate) fn day1() {
     part_one();
-    let (left_list, right_list) = build_lists();
-    part_two(left_list, right_list);
+    part_two();
 }
 
 // Total time complexity is O(n* log(k)) due to sorting requirement.
+/// Thanks to Chris Biscardi for this solution:
+/// https://www.youtube.com/watch?v=HXWnVnwqluQ
 fn part_one() {
-    let (mut left_list, mut right_list) = build_lists();
+    let mut left = Vec::new();
+    let mut right = Vec::new();
 
-    left_list.sort();
-    right_list.sort();
+    let input: String = fs::read_to_string("inputday1.txt")
+        .unwrap();
 
-    print_distance(left_list, right_list);
+    for line in input.lines() {
+        let mut items = line.split_whitespace();
+        left.push(
+            items.next().unwrap().parse::<i32>().unwrap(),
+        );
+        right.push(
+            items.next().unwrap().parse::<i32>().unwrap(),
+        );
+    }
+
+    left.sort();
+    right.sort();
+
+    let result: i32 = std::iter::zip(left, right)
+        .map(|(l, r)| {(l - r).abs()})
+        .sum();
+
+    println!("Result, Day 1 part 1: {}", result);
 }
 
-// O(n) time complexity
-fn part_two(left_list: Vec<u32>, right_list: Vec<u32>) {
-    let mut counts = HashMap::new();
-
-    // Count the number of times ID number shows in the right list
-    // O(n) time complexity
-    for id_num in right_list {
-        if let Some(count) = counts.get_mut(&id_num) {
-            *count += 1;
-        } else {
-            counts.insert(id_num, 1);
-        }
-    }
-
-    // Get the similarity score for each ID number in left list
-    // O(n) time complexity
-    let mut similarity_scores = Vec::new();
-    for id_num in left_list {
-        if let Some(count) = counts.get(&id_num) {
-            let similarity_score = id_num * count;
-            similarity_scores.push(similarity_score);
-        }
+// I think this is actually an O(n^2) solution. Because filter worst case would need to 
+// iterate through the whole right side for every value in left side.
+// Still an idiomatic and working solution.
+/// Thanks to Chris Biscardi for this solution:
+/// https://www.youtube.com/watch?v=HXWnVnwqluQ
+fn part_two() {
+    let mut left = vec![];
+    let mut right = vec![];
+    
+    let input: String = fs::read_to_string("inputday1.txt")
+        .unwrap();
+    for line in input.lines() {
+        let mut items = line.split_whitespace();
+        left.push(
+            items.next().unwrap().parse::<usize>().unwrap()
+        );
+        right.push(
+            items.next().unwrap().parse::<usize>().unwrap()
+        );
     }
     
-    let sum: u32 = similarity_scores.iter().sum();
-    println!("Similarity score of the lists is: {}", sum);
-}
-
-// Time complexity O(n)
-fn build_lists() -> (Vec<u32>, Vec<u32>){
-    let mut left_list = Vec::new();
-    let mut right_list = Vec::new();
-
-    let file = File::open("inputday1.txt")
-        .expect("Should be able to read");
-    let reader = BufReader::new(file);
-
-    for line in reader.lines() {
-        let line = line.unwrap();
-        let mut iter = line.split_ascii_whitespace();
-        let left = iter.next().unwrap().parse::<u32>().unwrap();
-        let right = iter.next().unwrap().parse::<u32>().unwrap();
-
-        left_list.push(left);
-        right_list.push(right);
-    }
-
-    (left_list, right_list)
-}
-
-// Time complexity O(n)
-fn print_distance(left_list: Vec<u32>, right_list: Vec<u32>) {
-    let mut iter = right_list.iter();
-    let mut total_distance = 0;
+    let result: usize = left
+        .iter()
+        .map(|number| {
+            number * right
+                .iter()
+                .filter(|r| &number == r)
+                .count()
+        })
+        .sum();
     
-    for left in left_list {
-        let right = iter.next().unwrap();
-        total_distance += left.abs_diff(*right);
-    }
-    
-    println!("Total distance: {}", total_distance);
+    println!("Result Day 1, part 2: {}", result);
 }
